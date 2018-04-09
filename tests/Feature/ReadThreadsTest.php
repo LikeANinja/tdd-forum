@@ -23,24 +23,27 @@ class ReadThreadsTest extends TestCase
         $this->thread = factory(Thread::class)->create();
     }
 
-    public function testAUserCanViewAllThreads()
+    /** @test */
+    public function a_user_can_view_all_threads()
     {
         $this->get('/threads')
             ->assertSee($this->thread->title);
 
     }
 
-    public function testAUserCanReadASingleThread()
+    /** @test */
+    public function a_user_can_read_a_single_thread()
     {
-        $this->get('/threads/' . $this->thread->id )
+        $this->get( $this->thread->path() )
             ->assertSee($this->thread->title);
     }
 
-    public function testAUserCanReadRepliesThatAreAssociatedWithAThread() {
+    /** @test */
+    public function a_user_can_read_replies_that_are_associated_with_a_thread() {
         // And that thread includes replies
         $reply = factory(\App\Models\Reply::class)->create(['thread_id' => $this->thread->id]);
         // When we visit a thread page
-        $this->get('/threads/' . $this->thread->id )
+        $this->get( $this->thread->path() )
             ->assertSee( $reply->body );
         // Then we should see the replies
 
