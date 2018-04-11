@@ -4,9 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Reply;
 use App\Models\Thread;
-use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
@@ -27,13 +25,13 @@ class ParticipateInForumTest extends TestCase
         public function an_authenticated_user_may_participate_in_forum_threads() {
 
         	// Given we have an authenticated user
-        	$this->be( $user = factory( User::class )->create() );
+                $this->signIn();
 
         	// And an existing thread
-        	$thread = factory( Thread::class )->create();
+        	$thread = create( Thread::class );
 
         	// When the user adds a reply to the thread
-        	$reply = factory( Reply::class )->make();
+        	$reply = make( Reply::class );
         	$this->post( $thread->path() . '/replies', $reply->toArray() );
 
 
