@@ -13,25 +13,15 @@ class CreateThreadsTest extends TestCase
 
 	/** @test */
 	public function guests_may_not_create_threads() {
-		// Given there is no user we expect an unauthenticated exception
-		$this->expectException( \Illuminate\Auth\AuthenticationException::class );
+        $this->withExceptionHandling();
 
-    	// When we hit the end point to create a new thread
-    	$thread = make( Thread::class );
-    	$this->post('/threads', $thread->toArray() );
-
-	}
-
-    /** @test */
-    public function guest_cannot_see_the_create_thread_page() {
-
-
-        // Given there is no user we expect to be redirected to the login page
-        $this->withExceptionHandling()
-            ->get('/threads/create')
+        $this->get('/threads/create')
             ->assertRedirect('/login');
 
-    }
+        $this->post('/threads')
+            ->assertRedirect('/login');
+
+	}
 
     /** @test */
     public function an_authenticated_user_can_create_new_forum_threads() {
@@ -40,7 +30,7 @@ class CreateThreadsTest extends TestCase
         $this->signIn();
 
     	// When we hit the end point to create a new thread
-    	$thread = make( Thread::class );
+    	$thread = create( Thread::class );
     	$this->post('/threads', $thread->toArray() );
 
     	// Then when we visit the thread page
