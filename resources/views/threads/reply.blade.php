@@ -5,6 +5,5 @@
     </div>
     <div class="card-body">
         {{ $reply->body }}
-        }
     </div>
 </div>
