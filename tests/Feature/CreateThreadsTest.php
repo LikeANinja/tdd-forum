@@ -25,10 +25,10 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function guest_cannot_see_the_create_thread_page() {
 
-        $this->withExceptionHandling();
 
         // Given there is no user we expect to be redirected to the login page
-        $this->get('/threads/create')
+        $this->withExceptionHandling()
+            ->get('/threads/create')
             ->assertRedirect('/login');
 
     }
