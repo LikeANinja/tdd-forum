@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class ReadThreadsTest extends TestCase
 {
-
     use DatabaseMigrations;
     /**
      * A basic test example.
@@ -17,7 +16,8 @@ class ReadThreadsTest extends TestCase
      * @return void
      */
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->thread = create(Thread::class);
@@ -28,30 +28,29 @@ class ReadThreadsTest extends TestCase
     {
         $this->get('/threads')
             ->assertSee($this->thread->title);
-
     }
 
     /** @test */
     public function a_user_can_read_a_single_thread()
     {
-        $this->get( $this->thread->path() )
+        $this->get($this->thread->path())
             ->assertSee($this->thread->title);
     }
 
     /** @test */
-    public function a_user_can_read_replies_that_are_associated_with_a_thread() {
+    public function a_user_can_read_replies_that_are_associated_with_a_thread()
+    {
         // And that thread includes replies
         $reply = create(\App\Models\Reply::class, ['thread_id' => $this->thread->id]);
         // When we visit a thread page
-        $this->get( $this->thread->path() )
-            ->assertSee( $reply->body );
+        $this->get($this->thread->path())
+            ->assertSee($reply->body);
         // Then we should see the replies
-
     }
 
     /** @test */
-    public function a_user_can_filter_threads_according_to_a_channel() {
-
+    public function a_user_can_filter_threads_according_to_a_channel()
+    {
         $channel = create(\App\Models\Channel::class);
         $threadInChannel = create(Thread::class, ['channel_id' => $channel->id]);
         $threadNotInChannel = create(Thread::class);
@@ -59,6 +58,5 @@ class ReadThreadsTest extends TestCase
         $this->get('/threads/' . $channel->slug)
             ->assertSee($threadInChannel->title)
             ->assertDontSee($threadNotInChannel->title);
-
     }
 }
