@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 
 class ThreadController extends Controller
 {
-
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth')->except(['index', 'show']);
     }
 
@@ -21,12 +20,20 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel)
     {
-        if ( $channel->exists ) {
-            $threads = $channel->threads()->latest()->get();
+        if ($channel->exists) {
+            $threads = $channel->threads()->latest();
         } else {
-            $threads = Thread::latest()->get();
+            $threads = Thread::latest();
         }
-        return view('threads.index', compact( 'threads') );
+
+        //if request('by'), we should filter by username
+        if ($username = request('by')) {
+            $user = \App\Models\User::where('name', $username)->firstOrFail();
+            $threads->where('user_id', $user->id);
+        }
+
+        $threads = $threads->get();
+        return view('threads.index', compact('threads'));
     }
 
     /**
@@ -47,8 +54,7 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validate( $request, [
+        $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
             'channel_id' => 'required|exists:channels,id'
@@ -61,7 +67,7 @@ class ThreadController extends Controller
             'body' => $request->body
         ]);
 
-        return redirect( $thread->path() );
+        return redirect($thread->path());
     }
 
     /**
@@ -73,7 +79,7 @@ class ThreadController extends Controller
      */
     public function show($channelId, Thread $thread)
     {
-        return view('threads.show', compact( 'thread' ));
+        return view('threads.show', compact('thread'));
     }
 
     /**

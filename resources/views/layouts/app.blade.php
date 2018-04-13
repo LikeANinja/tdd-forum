@@ -34,8 +34,18 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li><a class="nav-link" href="/threads">{{ __('Threads') }}</a></li>
-                        <li><a class="nav-link" href="/threads/create">{{ __('New Thread') }}</a></li>
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ __('Browse') }} <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link" href="/threads">{{ __('All Threads') }}</a>
+                                @if (auth()->check())
+                                    <a class="nav-link" href="/threads?by={{auth()->user()->name}}">{{ __('My Threads') }}</a>
+                                @endif
+                            </div>
+                        </li>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ __('Channels') }} <span class="caret"></span>
@@ -48,6 +58,7 @@
                                 @endforeach
                             </div>
                         </li>
+                        <li><a class="nav-link" href="/threads/create">{{ __('New Thread') }}</a></li>
 
                     </ul>
 
