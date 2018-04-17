@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,7 +15,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         \View::composer('*', function ($view) {
-            $view->with('channels', \App\Models\Channel::all());
+            $channels = Cache::rememberForever('channels', function() {
+                return \App\Models\Channel::all();
+            });
+
+            $view->with('channels', $channels);
         });
     }
 
