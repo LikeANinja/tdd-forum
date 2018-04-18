@@ -18,7 +18,7 @@
 		            	<div class="level">
 		            		<div class="flex">
 				                {{ $thread->creator->name }} posted:
-				                {{$thread->title}}
+				                <a href="{{$thread->path()}}">{{$thread->title}}</a>
 			                </div>
 			                <div>
 			                	{{$thread->created_at->diffForHumans()}}
