@@ -37,4 +37,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Thread::class)->latest();
     }
+
+    public function activity() {
+        return $this->hasMany(\App\Models\Activity::class);
+    }
 }

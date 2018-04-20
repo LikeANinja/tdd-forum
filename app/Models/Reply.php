@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-
     use Favorable, RecordActivity;
 
     protected $guarded = [];
@@ -17,5 +16,10 @@ class Reply extends Model
     public function owner()
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
+
+    public function thread()
+    {
+        return $this->belongsTo(\App\Models\Thread::class);
     }
 }
