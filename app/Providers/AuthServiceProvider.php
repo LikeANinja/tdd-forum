@@ -14,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\Thread' => 'App\Policies\ThreadPolicy',
+        'App\Models\Reply' => 'App\Policies\ReplyPolicy',
     ];
 
     /**
@@ -25,10 +26,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::before(function ($user) {
+        /*Gate::before(function ($user) {
             if ($user->name === 'Kristian Ager') {
                 return true;
             }
-        });
+        });*/
     }
 }

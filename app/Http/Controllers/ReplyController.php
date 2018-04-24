@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -41,10 +41,9 @@ class ReplyController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function store( Request $request, $channelId, Thread $thread )
+    public function store(Request $request, $channelId, Thread $thread)
     {
-
-        $this->validate( $request, [
+        $this->validate($request, [
             'body' => 'required'
         ]);
 
@@ -87,7 +86,8 @@ class ReplyController extends Controller
      */
     public function update(Request $request, Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+        $reply->update($request->only(['body']));
     }
 
     /**
@@ -98,6 +98,11 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        return back();
     }
 }
