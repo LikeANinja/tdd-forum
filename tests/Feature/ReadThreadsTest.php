@@ -38,17 +38,6 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_read_replies_that_are_associated_with_a_thread()
-    {
-        // And that thread includes replies
-        $reply = create(\App\Models\Reply::class, ['thread_id' => $this->thread->id]);
-        // When we visit a thread page
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
-        // Then we should see the replies
-    }
-
-    /** @test */
     public function a_user_can_filter_threads_according_to_a_channel()
     {
         $channel = create(\App\Models\Channel::class);
@@ -96,6 +85,17 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_filter_threads_by_those_that_are_unanswered()
+    {
+        $thread = create(\App\Models\Thread::class);
+        create(\App\Models\Reply::class, ['thread_id' => $thread->id]);
+        $response = $this->get('threads?unanswered=1');
+        $threadsFromResponse = $response->baseResponse->original->getData()['threads'];
+
+        $this->assertCount(1, $threadsFromResponse);
+    }
+
+    /** @test */
     public function a_guest_can_filter_threads_and_still_secondary_sort_by_time()
     {
         $secondThread = create(Thread::class, ['title' => 'Devon 2', 'created_at' => new Carbon('-2 minute')]);
@@ -108,5 +108,17 @@ class ReadThreadsTest extends TestCase
         $threadsFromResponse = $response->baseResponse->original->getData()['threads'];
 
         $this->assertEquals(['Devon 1', 'Devon 2'], $threadsFromResponse->pluck('title')->take(2)->all());
+    }
+
+    /** @test */
+    public function a_user_can_request_all_replies_for_a_given_thread()
+    {
+        $thread = create(\App\Models\Thread::class);
+        create(\App\Models\Reply::class, ['thread_id' => $thread->id], 2);
+
+        $response = $this->getJson($thread->path() . '/replies')->json();
+
+        $this->assertCount(2, $response['data']);
+        $this->assertEquals(2, $response['total']);
     }
 }

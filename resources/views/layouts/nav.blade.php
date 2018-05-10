@@ -18,6 +18,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/threads">{{ __('All Threads') }}</a>
                         <a class="dropdown-item" href="/threads?popular=1">{{ __('Popular All Time') }}</a>
+                        <a class="dropdown-item" href="/threads?unanswered=1">{{ __('Unanswered Threads') }}</a>
                         @if (auth()->check())
                             <a class="dropdown-item" href="/threads?by={{auth()->user()->name}}">{{ __('My Threads') }}</a>
                         @endif

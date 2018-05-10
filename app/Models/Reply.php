@@ -12,19 +12,19 @@ class Reply extends Model
 
     protected $guarded = [];
     protected $with = ['owner', 'favorites'];
+    protected $appends = ['favoritesCount','isFavorited'];
 
     public static function boot()
     {
         parent::boot();
 
-        static::deleting(function ($reply) {
-            $reply->favorites->each->delete();
+        static::created(function ($reply) {
+            $reply->thread->increment('replies_count');
         });
-    }
 
-    public function favorites()
-    {
-        return $this->morphMany(\App\Models\Favorite::class, 'favorited');
+        static::deleted(function ($reply) {
+            $reply->thread->decrement('replies_count');
+        });
     }
 
     public function owner()

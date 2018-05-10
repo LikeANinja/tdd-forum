@@ -8,13 +8,9 @@
     		        {{ $reply->created_at->diffForHumans() }}
     			</div>
     	        <div>
-
-    	        	<form action="/replies/{{$reply->id}}/favorites" method="POST">
-    	        		@csrf
-    	        		<button class="btn btn-default btn-sm" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-    	        			{{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}
-    	        		</button>
-    	        	</form>
+                    @if(Auth::check())
+                    <favorite :reply="{{$reply}}"></favorite>
+                    @endif
     	        </div>
     	    </div>
         </div>
@@ -32,11 +28,7 @@
         @can('update', $reply)
         <div class="card-footer level">
             <button class="btn btn-default btn-sm m-r-1" @click="editing = true">Edit</button>
-        	<form action="/replies/{{$reply->id}}" method="POST">
-        		@csrf
-        		{{ method_field('DELETE') }}
-        		<button class="btn btn-danger btn-sm">Delete</button>
-        	</form>
+            <button class="btn btn-danger btn-sm m-r-1" @click="destroy">Delete</button>
         </div>
         @endcan
     </div>

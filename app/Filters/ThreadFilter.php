@@ -7,13 +7,12 @@ use App\Models\User;
 
 class ThreadFilter extends Filter
 {
-
-	protected $filters = ['by', 'popular'];
-	/**
-	 * Filter the query by a username
-	 * @param  string $username
-	 * @return Builder
-	 */
+    protected $filters = ['by', 'popular', 'unanswered'];
+    /**
+     * Filter the query by a username
+     * @param  string $username
+     * @return Builder
+     */
     protected function by($username)
     {
         $user = User::where('name', $username)->firstOrFail();
@@ -24,7 +23,13 @@ class ThreadFilter extends Filter
      * Filter the query according to the most popular thread
      * @return Builder
      */
-    protected function popular() {
-    	return $this->builder->orderBy('replies_count', 'desc');
+    protected function popular()
+    {
+        return $this->builder->orderBy('replies_count', 'desc');
+    }
+
+    protected function unanswered()
+    {
+        return $this->builder->where('replies_count', 0);
     }
 }

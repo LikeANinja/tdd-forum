@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Favorite;
-use App\Models\Reply;
+use App\Models\Thread;
+use App\ThreadSubscription;
 use Illuminate\Http\Request;
 
-class FavoriteController extends Controller
+class ThreadSubscriptionController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -38,19 +34,18 @@ class FavoriteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Reply $reply)
+    public function store(Request $request, $channelId, Thread $thread)
     {
-        $reply->favorite();
-        return back();
+        $thread->subscribe();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\ThreadSubscription  $threadSubscription
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Thread $thread)
     {
         //
     }
@@ -58,10 +53,10 @@ class FavoriteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\ThreadSubscription  $threadSubscription
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(v $thread)
     {
         //
     }
@@ -70,10 +65,10 @@ class FavoriteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\ThreadSubscription  $threadSubscription
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Thread $thread)
     {
         //
     }
@@ -81,11 +76,11 @@ class FavoriteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\ThreadSubscription  $threadSubscription
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reply $reply)
+    public function destroy($channelId, Thread $thread)
     {
-        $reply->unfavorite();
+        $thread->unsubscribe();
     }
 }
